@@ -1,0 +1,10 @@
+[
+  {
+    "id": "citation-precision-minimum-wage",
+    "query": "葡萄牙2025年的最低月工资是多少？",
+    "answer_language": "zh",
+    "jurisdictions": ["PT"],
+    "relevant_document_ids": ["mofcom-portugal-guide-2025"],
+    "expected_status": "ANSWERED"
+  }
+]

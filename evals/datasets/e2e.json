@@ -1,0 +1,8 @@
+[
+  {"id":"e2e-br-zh","query":"巴西企业可以采用哪些常见组织形式？","jurisdictions":["BR"],"request_jurisdictions":["BR"],"expected_status":"ANSWERED","relevant_document_ids":["mofcom-brazil-guide-2025"]},
+  {"id":"e2e-pt-zh","query":"葡萄牙2025年月最低工资在指南中是多少？","jurisdictions":["PT"],"request_jurisdictions":["PT"],"expected_status":"ANSWERED","relevant_document_ids":["mofcom-portugal-guide-2025"]},
+  {"id":"e2e-pt-pt","query":"Quais são as formas societárias mais comuns em Portugal?","answer_language":"pt","jurisdictions":["PT"],"request_jurisdictions":["PT"],"expected_status":"ANSWERED","relevant_document_ids":["mofcom-portugal-guide-2025"]},
+  {"id":"e2e-compare","query":"比较巴西和葡萄牙最常见的公司设立形式。","jurisdictions":["BR","PT"],"request_jurisdictions":["BR","PT"],"expected_status":"ANSWERED","relevant_document_ids":["mofcom-brazil-guide-2025","mofcom-portugal-guide-2025"]},
+  {"id":"e2e-predict","query":"葡萄牙某家公司下周会不会被税务调查？","jurisdictions":["PT"],"request_jurisdictions":["PT"],"expected_status":"ABSTAINED","relevant_document_ids":[]},
+  {"id":"e2e-ambiguous","query":"企业所得税规则是什么？","jurisdictions":[],"expected_status":"ABSTAINED","relevant_document_ids":[]}
+]

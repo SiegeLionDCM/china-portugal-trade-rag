@@ -1,0 +1,28 @@
+[
+  {
+    "document_id": "mofcom-brazil-guide-2025",
+    "file": "mofcom_brazil_2025.pdf",
+    "title": "对外投资合作国别（地区）指南——巴西（2025年版）",
+    "publisher": "中华人民共和国商务部",
+    "source_url": "https://www.mofcom.gov.cn/dl/gbdqzn/upload/baxi.pdf",
+    "jurisdiction": "BR",
+    "language": "zh",
+    "topics": ["market_access", "tax", "labor"],
+    "source_tier": "official_guide",
+    "published_date": "2025-12-01",
+    "notes": "正文标注2025年版；月份为数据清单占位精度。指南不是法规原文，具体义务需复核主管机关现行规定。"
+  },
+  {
+    "document_id": "mofcom-portugal-guide-2025",
+    "file": "mofcom_portugal_2025.pdf",
+    "title": "对外投资合作国别（地区）指南——葡萄牙（2025年版）",
+    "publisher": "中华人民共和国商务部",
+    "source_url": "https://www.mofcom.gov.cn/dl/gbdqzn/upload/putaoya.pdf",
+    "jurisdiction": "PT",
+    "language": "zh",
+    "topics": ["market_access", "tax", "labor"],
+    "source_tier": "official_guide",
+    "published_date": "2025-12-01",
+    "notes": "文件首屏标注2025年版；文件名沿用初次下载名，不作为版本判断依据。"
+  }
+]

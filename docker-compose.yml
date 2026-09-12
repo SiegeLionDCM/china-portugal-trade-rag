@@ -1,0 +1,25 @@
+services:
+  api:
+    build: .
+    env_file: .env
+    command: python -m uvicorn apps.api.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  web:
+    build: .
+    environment:
+      COPILOT_API_URL: http://api:8000
+    command: python -m streamlit run apps/web/app.py --server.address 0.0.0.0
+    ports:
+      - "127.0.0.1:8501:8501"
+    depends_on:
+      api:
+        condition: service_healthy

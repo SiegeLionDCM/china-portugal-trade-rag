@@ -8,8 +8,10 @@
 
 - Embedding：硅基流动 `Qwen/Qwen3-Embedding-8B`
 - Reranker：在线默认使用硅基流动 `Qwen/Qwen3-Reranker-4B`；质量档可切换为 8B
-- LLM：DeepSeek `deepseek-v4-flash`
+- LLM：DeepSeek `deepseek-flash`（DeepSeek-V4.1-Flash 的官方生产别名）
 - 所有模型名和 API 地址均可通过环境变量切换。
+
+`deepseek-v4-flash` 与 `deepseek-v4-flash-vision-exp` 是旧兼容名称；新部署应设置 `LLM_MODEL=deepseek-flash`。本项目采用 Chat Completions 的 OpenAI 兼容接口，基础地址保持 `https://api.deepseek.com`。模型别名与接口兼容性以 [DeepSeek 官方 API 文档](https://api-docs.deepseek.com/quick_start/pricing/) 为准。
 
 不要把真实 API Key 写入仓库。任何曾在聊天、截图或日志中出现的 Key 都应撤销并重新生成。
 

@@ -19,8 +19,12 @@ class Settings(BaseSettings):
     embedding_dimension: int = 4096
 
     deepseek_base_url: str = "https://api.deepseek.com"
-    llm_model: str = "deepseek-v4-flash"
+    # DeepSeek's current production alias for DeepSeek-V4.1-Flash.
+    llm_model: str = "deepseek-flash"
     llm_max_tokens: int = Field(1600, ge=256, le=8192)
+
+    # Shared by native Streamlit and API processes. Docker Compose overrides it.
+    copilot_api_url: str = "http://127.0.0.1:8000"
 
     qdrant_path: Path = Path("data/index/qdrant")
     sqlite_path: Path = Path("data/metadata.db")
@@ -36,7 +40,7 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     debug_context: bool = False
 
-    @field_validator("siliconflow_base_url", "deepseek_base_url")
+    @field_validator("siliconflow_base_url", "deepseek_base_url", "copilot_api_url")
     @classmethod
     def strip_url(cls, value: str) -> str:
         return value.rstrip("/")

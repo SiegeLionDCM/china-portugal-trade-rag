@@ -50,7 +50,7 @@ async def test_siliconflow_retries_transport_timeout() -> None:
 async def test_deepseek_json_contract() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         payload = json.loads(request.content)
-        assert payload["model"] == "deepseek-v4-flash"
+        assert payload["model"] == "deepseek-flash"
         assert payload["response_format"] == {"type": "json_object"}
         return httpx.Response(200, json={"choices": [{"message": {"content": '{"answer":"ok [1]"}'}}]})
 

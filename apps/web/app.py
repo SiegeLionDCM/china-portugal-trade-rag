@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import os
-
 import httpx
 import streamlit as st
 
-API_URL = os.getenv("COPILOT_API_URL", "http://127.0.0.1:8000")
+from trade_copilot.config import get_settings
+
+API_URL = get_settings().copilot_api_url
 
 st.set_page_config(page_title="中葡经贸合规智能体", page_icon="🌐", layout="wide")
 st.title("中葡经贸合规智能体")
@@ -19,7 +19,7 @@ with st.sidebar:
         health = httpx.get(f"{API_URL}/health", timeout=3).json()
         st.metric("已索引片段", health["index"]["chunks"])
     except (httpx.HTTPError, KeyError, ValueError):
-        st.warning("API 尚未连接")
+        st.warning(f"API 尚未连接（{API_URL}）")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []

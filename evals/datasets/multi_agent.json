@@ -1,0 +1,14 @@
+[
+  {
+    "id": "multi-agent-company-forms-comparison",
+    "query": "比较巴西和葡萄牙常见的公司组织形式",
+    "answer_language": "zh",
+    "jurisdictions": ["BR", "PT"],
+    "request_jurisdictions": ["BR", "PT"],
+    "relevant_document_ids": [
+      "mofcom-brazil-guide-2025",
+      "mofcom-portugal-guide-2025"
+    ],
+    "expected_status": "ANSWERED"
+  }
+]

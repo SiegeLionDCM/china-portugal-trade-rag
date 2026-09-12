@@ -50,6 +50,19 @@ if query:
                 badge = f"**{data['status']} · 证据{data['evidence_level']}**"
                 st.markdown(badge)
                 st.markdown(data["answer"])
+                if data.get("agent_trace"):
+                    with st.expander("多 Agent 执行过程", expanded=True):
+                        icons = {"completed": "✅", "failed": "❌", "skipped": "⏭️"}
+                        for step in data["agent_trace"]:
+                            duration = (
+                                f" · {step['duration_ms']:.0f} ms"
+                                if step.get("duration_ms") is not None
+                                else ""
+                            )
+                            st.markdown(
+                                f"{icons.get(step['status'], '•')} **{step['agent']}**{duration}  \n"
+                                f"{step['summary']}"
+                            )
                 for citation in data["citations"]:
                     location = f"第 {citation['page']} 页" if citation.get("page") else citation.get("section") or "章节未标注"
                     with st.expander(f"[{citation['id']}] {citation['title']} · {location}"):

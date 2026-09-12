@@ -20,8 +20,8 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(
     title="中葡经贸合规智能体 API",
-    version="0.1.0",
-    description="Auditable Chinese-Portuguese compliance RAG; informational use only.",
+    version="0.2.0",
+    description="Auditable multi-agent Chinese-Portuguese compliance RAG; informational use only.",
     lifespan=lifespan,
 )
 ServiceDep = Annotated[ApplicationServices, Depends(get_services)]

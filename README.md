@@ -1,6 +1,6 @@
 # 中葡经贸合规智能体
 
-面向中国企业出海巴西、葡萄牙场景的可审计跨语言 RAG Demo。系统把 Context Engine 作为核心：先识别语言、法域、主题、意图和会话指代，再执行混合检索、重排、证据门控和带句级引用的回答生成。没有可靠依据时会澄清、部分回答或拒答。
+面向中国企业出海巴西、葡萄牙场景的可审计跨语言多 Agent RAG Demo。系统以 Context Engine 为入口，由 Supervisor 动态调度巴西和葡萄牙 Research Agent，再经过证据仲裁、受控生成与引用校验。没有可靠依据时会澄清、部分回答或拒答。
 
 > 本项目提供资料检索辅助，不构成法律、税务或投资意见。
 
@@ -20,19 +20,31 @@
 ```mermaid
 flowchart LR
   UI[Streamlit] --> API[FastAPI]
-  API --> G[LangGraph]
-  G --> C[Context Engine]
-  C --> R[Dense + BM25 / RRF]
-  R --> Q[(Qdrant)]
-  R --> RR[SiliconFlow Reranker]
-  RR --> V[Evidence Verifier]
-  V --> D{Evidence gate}
-  D -->|sufficient/partial| L[DeepSeek Composer]
-  D -->|insufficient| A[Abstain]
-  L --> CV[Citation Validator]
+  API --> C[Context Engine]
+  C --> S[Supervisor Agent]
+  S -->|BR| BR[Brazil Research Agent]
+  S -->|PT| PT[Portugal Research Agent]
+  BR --> R[Dense + BM25 + RRF + Rerank]
+  PT --> R
+  R --> Q[(Qdrant + SQLite)]
+  BR --> EA[Evidence Arbiter]
+  PT --> EA
+  EA -->|充分或部分充分| SY[Synthesis Agent]
+  EA -->|不足| AB[Abstain]
+  SY --> CV[Citation Validator]
 ```
 
 系统以“上下文识别 → 混合检索 → 重排 → 证据门控 → 可引用回答”为主链路；当资料不足、问题歧义或涉及无法由资料支持的预测时，系统会澄清或拒答，而非生成确定性结论。
+
+## 多 Agent 协作
+
+- `Supervisor Agent`：根据 Context Engine 产出的法域与意图创建有界执行计划；单法域走单任务，中葡比较并行派发两个任务。
+- `Brazil / Portugal Research Agent`：每个 Agent 只能在自己的法域过滤条件内调用混合检索工具，只返回候选证据，不直接生成答案。
+- `Evidence Arbiter`：合并、去重并审核各 Agent 的证据，执行来源等级、相关性阈值、有效期和法域完整性检查。
+- `Synthesis Agent`：只能使用仲裁通过的证据生成中文或葡语回答。
+- `Citation Validator`：检查回答中的引用编号；验证失败时关闭式拒答。
+
+Agent 之间通过 LangGraph 的类型化共享状态通信，不进行自由格式群聊。Web 界面仅展示角色、状态、耗时和决策摘要，不展示模型思维链。Research Agent 的并行失败相互隔离：一个法域失败时，另一个法域仍可完成，Evidence Arbiter 决定返回部分回答或拒答。
 
 ## 本地启动
 
@@ -129,6 +141,27 @@ POST /v1/query
 ```
 
 回答状态：`ANSWERED`、`PARTIAL`、`CONFLICTED`、`ABSTAINED`。界面展示的是证据充分度，不把向量相似度包装为答案置信概率。
+
+响应中的 `agent_trace` 是可公开展示的执行摘要：
+
+```json
+{
+  "agent_trace": [
+    {
+      "agent": "supervisor_agent",
+      "status": "completed",
+      "summary": "生成 2 个 parallel 研究任务。",
+      "duration_ms": 0.1
+    },
+    {
+      "agent": "evidence_arbiter",
+      "status": "completed",
+      "summary": "审核候选证据并给出 ANSWERED 结论。",
+      "duration_ms": 0.2
+    }
+  ]
+}
+```
 
 ## 评测
 

@@ -135,6 +135,32 @@ class EvidenceDecision(BaseModel):
     evidence: list[CandidateEvidence] = Field(default_factory=list)
 
 
+class AgentTask(BaseModel):
+    agent: Literal["brazil_researcher", "portugal_researcher"]
+    jurisdiction: Jurisdiction
+    objective: str
+
+
+class ExecutionPlan(BaseModel):
+    mode: Literal["single", "parallel"]
+    tasks: list[AgentTask]
+
+
+class ResearchResult(BaseModel):
+    agent: Literal["brazil_researcher", "portugal_researcher"]
+    jurisdiction: Jurisdiction
+    candidates: list[CandidateEvidence] = Field(default_factory=list)
+    duration_ms: float = 0.0
+    error: str | None = None
+
+
+class AgentTraceStep(BaseModel):
+    agent: str
+    status: Literal["completed", "failed", "skipped"]
+    summary: str
+    duration_ms: float | None = None
+
+
 class QueryResponse(BaseModel):
     request_id: str
     status: AnswerStatus
@@ -144,6 +170,7 @@ class QueryResponse(BaseModel):
     reasons: list[str] = Field(default_factory=list)
     information_as_of: datetime = Field(default_factory=lambda: datetime.now(UTC))
     disclaimer: str
+    agent_trace: list[AgentTraceStep] = Field(default_factory=list)
     trace: dict[str, Any] | None = None
 
 
@@ -153,4 +180,3 @@ class IngestResult(BaseModel):
     documents_skipped: int = 0
     chunks_indexed: int = 0
     errors: list[str] = Field(default_factory=list)
-

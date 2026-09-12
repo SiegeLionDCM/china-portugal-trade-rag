@@ -16,10 +16,12 @@ with st.sidebar:
     selected = st.multiselect("法域 / Jurisdição", [("巴西", "BR"), ("葡萄牙", "PT")], format_func=lambda x: x[0])
     st.info("本系统用于资料检索，不构成法律、税务或投资意见。")
     try:
-        health = httpx.get(f"{API_URL}/health", timeout=3).json()
+        with httpx.Client(timeout=3, trust_env=False) as client:
+            health = client.get(f"{API_URL}/health").json()
         st.metric("已索引片段", health["index"]["chunks"])
-    except (httpx.HTTPError, KeyError, ValueError):
-        st.warning(f"API 尚未连接（{API_URL}）")
+        st.caption(f"API 已连接 · {API_URL}")
+    except (httpx.HTTPError, KeyError, ValueError) as exc:
+        st.warning(f"API 尚未连接（{API_URL}）：{type(exc).__name__}")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -41,7 +43,8 @@ if query:
                 "conversation": st.session_state.messages[-9:-1],
             }
             try:
-                response = httpx.post(f"{API_URL}/v1/query", json=payload, timeout=60)
+                with httpx.Client(timeout=60, trust_env=False) as client:
+                    response = client.post(f"{API_URL}/v1/query", json=payload)
                 response.raise_for_status()
                 data = response.json()
                 badge = f"**{data['status']} · 证据{data['evidence_level']}**"

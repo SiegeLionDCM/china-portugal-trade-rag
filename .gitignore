@@ -9,3 +9,5 @@ data/metadata.db
 data/raw/
 evals/reports/*.json
 evals/reports/*.md
+demo需求说明_给AI编程工具.md
+RAG系统需求与架构优化提案.md
